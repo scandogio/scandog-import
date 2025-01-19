@@ -35,10 +35,12 @@ runs:
         python-version: '3.x'
 
     - name: Install dependencies
+      shell: bash
       run: pip install requests
 
     - name: Run Import Script
       shell: bash
+      run: python import.py
       env:
         CI_RUN_ID: ${{ github.run_id }}
         REPORT_FILE: ${{ inputs.report_file }}
@@ -47,8 +49,6 @@ runs:
         SCANNER: ${{ inputs.scanner }}
         BACKEND_API_TOKEN: ${{ inputs.backend_api_token }}
         BACKEND_URL: ${{ inputs.backend_url }}
-      run: |
-        python import.py
 
 branding:
   icon: 'upload-cloud'
