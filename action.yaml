@@ -41,7 +41,7 @@ runs:
     - name: Run Import Script
       shell: bash
       env:
-        GITHUB_RUN_ID: ${{ github.run_id }}
+        CI_RUN_ID: ${{ github.run_id }}
         REPORT_FILE: ${{ inputs.report_file }}
         WORKFLOW_ID: ${{ inputs.workflow_id }}
         SCAN_TYPE: ${{ inputs.scan_type }}

@@ -58,7 +58,7 @@ jobs:
           scan_type: Container Scanner
           scanner: Trivy
           backend_api_token: ${{ secrets.SCANDOG_API_KEY }}
-          backend_url: https://[Your-instance].scandog.app
+          backend_url: https://[Your-instance-backend-address]
 ```
 
 ## Troubleshooting
