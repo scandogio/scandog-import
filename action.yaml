@@ -1,29 +1,39 @@
 name: 'Import Scanner Results to ScanDog'
-description: 'A GitHub Action to import scanner results into the ScanDog platform.'
+description: 'A GitHub Action to import scanner results into the ScanDog platform. Supports both file-based import and cloud scanner sync.'
 author: 'ScanDog Team'
 inputs:
+  endpoint_type:
+    description: 'Type of endpoint to use: "import" for file uploads or "sync" for cloud scanner sync (default: sync)'
+    required: false
+    default: 'sync'
   report_file:
-    description: 'Path to the scanner results file (JSON format).'
-    required: true
+    description: 'Path to the scanner results file (JSON format). Required for import endpoint only.'
+    required: false
   workflow_id:
     description: 'The identifier for the workflow.'
     required: true
   scan_type:
-    description: 'The type of scan (e.g., FullScan, QuickScan).'
-    required: true
+    description: 'The type of scan (e.g., FullScan, QuickScan). Required for import endpoint only.'
+    required: false
   scanner:
-    description: 'The name of the scanner (e.g., AWS Inspector, Snyk).'
+    description: 'The name of the scanner (e.g., AWS Inspector, Snyk, SonarQube).'
     required: true
-  backend_api_token:
+  project_key:
+    description: 'Project identifier for SonarQube/SonarCloud. Required for sync endpoint if project_id not provided.'
+    required: false
+  project_id:
+    description: 'Project identifier for Snyk, Mend, etc. Required for sync endpoint if project_key not provided.'
+    required: false
+  scandog_token:
     description: 'The API token for authenticating with ScanDog.'
     required: true
     secret: true
-  backend_url:
+  scandog_url:
     description: 'The base URL of the ScanDog API.'
     required: true
   ci_run_id:
-    description: 'The identifier for the CI/CD run.'
-    required: true
+    description: 'The identifier for the CI/CD run. Required for import endpoint only.'
+    required: false
 outputs:
   status:
     description: 'Status of the import operation (success/failure).'
@@ -33,13 +43,16 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   env:
+    ENDPOINT_TYPE: ${{ inputs.endpoint_type }}
     CI_RUN_ID: ${{ inputs.ci_run_id }}
     REPORT_FILE: ${{ inputs.report_file }}
     WORKFLOW_ID: ${{ inputs.workflow_id }}
     SCAN_TYPE: ${{ inputs.scan_type }}
     SCANNER: ${{ inputs.scanner }}
-    BACKEND_API_TOKEN: ${{ inputs.backend_api_token }}
-    BACKEND_URL: ${{ inputs.backend_url }}
+    PROJECT_KEY: ${{ inputs.project_key }}
+    PROJECT_ID: ${{ inputs.project_id }}
+    SCANDOG_TOKEN: ${{ inputs.scandog_token }}
+    SCANDOG_URL: ${{ inputs.scandog_url }}
 
 branding:
   icon: 'upload-cloud'
