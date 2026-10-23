@@ -13,8 +13,8 @@ inputs:
     description: 'The identifier for the workflow.'
     required: true
   scan_type:
-    description: 'The type of scan (e.g., FullScan, QuickScan). Required for import endpoint only.'
-    required: false
+    description: 'The type of scan (e.g., SAST, SCA, IaC, etc.).'
+    required: true
   scanner:
     description: 'The name of the scanner (e.g., AWS Inspector, Snyk, SonarQube).'
     required: true
